@@ -18,7 +18,8 @@ export const setMessage = () => {
 
 export const setQuiz = quiz => {
   ({ type: types.SET_QUIZ_INTO_STATE,
-    payload: {quiz_id: quiz.quiz_id, question: quiz.question,
+    payload: {
+      quiz_id: quiz.quiz_id, question: quiz.question,
       answers: [{answer_id: quiz.answers[0].answer_id, text: quiz.answers[0].text},
       {answer_id: quiz.answers[1].answer_id, text: quiz.answers[1].text}]
     }
@@ -26,7 +27,7 @@ export const setQuiz = quiz => {
 }
 
 export const inputChange = (value, inputId) => 
-  ({ type: types.INPUT_CHANGE, payload: { value: PictureInPictureWindow.value, inputID: inputId } })
+  ({ type: types.INPUT_CHANGE, payload: { value: value, inputID: inputId } })
 
 export const resetForm = () =>
   ({ type: types.RESET_FORM })
@@ -54,7 +55,7 @@ export function postAnswer() {
     axios.post('http://localhost:9000/api/quiz/answer')
       .then(res => {
         console.log(res);
-        
+        dispatch({ type: types.SET_INFO_MESSAGE, payload: res.data})
       })
       .catch(err => {
         console.error(err);
@@ -67,6 +68,14 @@ export function postAnswer() {
 }
 export function postQuiz() {
   return function (dispatch) {
+    dispatch({ type: types.SET_INFO_MESSAGE, payload: res.data })
+    axios.post('http://localhost:9000/api/quiz/new')
+      .then(res => {
+        dispatch({ type: types.SET_INFO_MESSAGE, payload: null })
+      })
+      .catch(err => {
+        console.error(err);
+      })
 
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
