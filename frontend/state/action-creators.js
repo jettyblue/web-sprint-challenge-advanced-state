@@ -8,9 +8,13 @@ export const moveClockwise = () =>
 export const moveCounterClockwise = () =>
   ({ type: types.MOVE_COUNTERCLOCKWISE })
 
-export function selectAnswer() { }
+export const selectAnswer = id => {
+  ({ type: types.SET_SELECTED_ANSWER, payload: id })
+}
 
-export function setMessage() { }
+export const setMessage = () => {
+  ({ type: types.SET_INFO_MESSAGE })
+}
 
 export const setQuiz = quiz => {
   ({ type: types.SET_QUIZ_INTO_STATE,
@@ -21,8 +25,8 @@ export const setQuiz = quiz => {
   })
 }
 
-export const inputChange = value => 
-  ({ type: types.INPUT_CHANGE, payload: value })
+export const inputChange = (value, inputId) => 
+  ({ type: types.INPUT_CHANGE, payload: { value: PictureInPictureWindow.value, inputID: inputId } })
 
 export const resetForm = () =>
   ({ type: types.RESET_FORM })
@@ -30,7 +34,7 @@ export const resetForm = () =>
 // ❗ Async action creators
 export function fetchQuiz() {
   return function (dispatch) {
-    dispatch({ type: types.SET_QUIZ_INTO_STATE, payload: null });
+    dispatch({ type: types.SET_QUIZ_INTO_STATE, payload: null })
     axios.get('http://localhost:9000/api/quiz/next')
       .then(res => {
         console.log(res);
@@ -46,6 +50,15 @@ export function fetchQuiz() {
 }
 export function postAnswer() {
   return function (dispatch) {
+    dispatch({ type: types.SET_SELECTED_ANSWER, payload: null})
+    axios.post('http://localhost:9000/api/quiz/answer')
+      .then(res => {
+        console.log(res);
+        
+      })
+      .catch(err => {
+        console.error(err);
+      })
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
@@ -54,6 +67,7 @@ export function postAnswer() {
 }
 export function postQuiz() {
   return function (dispatch) {
+
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
     // - Dispatch the resetting of the form
