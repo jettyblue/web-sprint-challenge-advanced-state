@@ -2,32 +2,26 @@ import * as types from './action-types';
 import axios from 'axios';
 
 // ❗ You don't need to add extra action creators to achieve MVP
-export const moveClockwise = () =>
-  ({ type: types.MOVE_CLOCKWISE })
+export const moveClockwise = (currentlyActive) =>
+  ({ type: types.MOVE_CLOCKWISE, payload: currentlyActive })
 
-export const moveCounterClockwise = () =>
-  ({ type: types.MOVE_COUNTERCLOCKWISE })
+export const moveCounterClockwise = (currentlyActive) =>
+  ({ type: types.MOVE_COUNTERCLOCKWISE, payload: currentlyActive })
 
-export const selectAnswer = id => {
-  ({ type: types.SET_SELECTED_ANSWER, payload: id })
+export const selectAnswer = (whichAnswer) => {
+  ({ type: types.SET_SELECTED_ANSWER, payload: whichAnswer })
 }
 
-export const setMessage = () => {
-  ({ type: types.SET_INFO_MESSAGE })
+export const setMessage = (newMessage) => {
+  ({ type: types.SET_INFO_MESSAGE, payload: newMessage })
 }
 
-export const setQuiz = quiz => {
-  ({ type: types.SET_QUIZ_INTO_STATE,
-    payload: {
-      quiz_id: quiz.quiz_id, question: quiz.question,
-      answers: [{answer_id: quiz.answers[0].answer_id, text: quiz.answers[0].text},
-      {answer_id: quiz.answers[1].answer_id, text: quiz.answers[1].text}]
-    }
-  })
+export const setQuiz = newQuiz => {
+  ({ type: types.SET_QUIZ_INTO_STATE, payload: newQuiz })
 }
 
-export const inputChange = (value, inputId) => 
-  ({ type: types.INPUT_CHANGE, payload: { value: value, inputID: inputId } })
+export const inputChange = (targetName, value) => 
+  ({ type: types.INPUT_CHANGE, payload: { targetName: targetName, value: value } })
 
 export const resetForm = () =>
   ({ type: types.RESET_FORM })
@@ -49,13 +43,14 @@ export function fetchQuiz() {
     // - Dispatch an action to send the obtained quiz to its state
   }
 }
-export function postAnswer() {
+export function postAnswer(answerObj) {
   return function (dispatch) {
-    dispatch({ type: types.SET_SELECTED_ANSWER, payload: null})
-    axios.post('http://localhost:9000/api/quiz/answer')
+    // dispatch({ type: types.SET_SELECTED_ANSWER, payload: answerObj})
+    axios.post('http://localhost:9000/api/quiz/answer', answerObj)
       .then(res => {
         console.log(res);
-        dispatch({ type: types.SET_INFO_MESSAGE, payload: res.data})
+        dispatch({ type: types.SET_SELECTED_ANSWER, payload: null })
+        dispatch({ type: types.SET_INFO_MESSAGE, payload: res.data.message})
       })
       .catch(err => {
         console.error(err);
@@ -66,12 +61,13 @@ export function postAnswer() {
     // - Dispatch the fetching of the next quiz
   }
 }
-export function postQuiz() {
+export function postQuiz(newQuiz) {
   return function (dispatch) {
-    dispatch({ type: types.SET_INFO_MESSAGE, payload: res.data })
-    axios.post('http://localhost:9000/api/quiz/new')
+    // dispatch({ type: types.SET_INFO_MESSAGE, payload: res.data })
+    axios.post('http://localhost:9000/api/quiz/new', newQuiz)
       .then(res => {
-        dispatch({ type: types.SET_INFO_MESSAGE, payload: null })
+        dispatch(setMessage(`Congrats: "${res.data.question}" is a great question!`))
+        dispatch(resetForm())
       })
       .catch(err => {
         console.error(err);

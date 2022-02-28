@@ -1,5 +1,9 @@
 import React from 'react'
+import * as actionCreators from '../state/action-creators'
+import { connect } from 'react-redux'
 
-export default function Message(props) {
-  return <div id="message">Nice job!</div>
+function Message(props) {
+  return <div id="message">{props.infoMessage}</div>
 }
+
+export default connect(st => st, actionCreators)(Message)
