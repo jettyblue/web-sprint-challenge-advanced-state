@@ -1,17 +1,29 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import * as actionCreators from '../state/action-creators';
+import { connect } from 'react-redux';
 
-export function Quiz(props) {
-  const { quiz } = props;
-  console.log(props);
+function Quiz(props) {
+  const { quiz , answer } = props;
+  // console.log(props);
 
   useEffect(() => {
-    // props.fetchQuiz()
+      props.fetchQuiz()
   }, []);
-  
 
+  const handleCorrectAnswer = () => {
+    props.selectAnswer(quiz.answers[0]);
+  }
+
+  const handleWrongAnswer = () => {
+    props.selectAnswer(quiz.answers[1])
+  }
+
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    props.postAnswer(quiz, answer);
+    // props.fetchQuiz()
+  }
+  
   return (
     <div id="wrapper">
       {
@@ -21,23 +33,21 @@ export function Quiz(props) {
             <h2>{quiz.question}</h2>
 
             <div id="quizAnswers">
-
-              <div className="answer selected">
-                A function
-                <button>
-                  SELECTED
+              <div className= { answer === quiz.answers[0] ? 'answer selected' : answer === null ? 'answer' : 'answer' }>
+                { quiz.answers[0].text }
+                <button onClick={handleCorrectAnswer}>
+                  { answer === quiz.answers[0] ? 'SELECTED' : answer === null ? 'Select' : 'Select' }
                 </button>
               </div>
 
-              <div className="answer">
-                An elephant
-                <button>
-                  Select
+              <div className= { answer === quiz.answers[1] ? 'answer selected' : answer === null ? 'answer' : 'answer' }>
+                <button onClick={handleWrongAnswer}>
+                  { answer === quiz.answers[1] ? 'SELECTED' : answer === null ? 'Select' : 'Select' }
                 </button>
               </div>
             </div>
 
-            <button id="submitAnswerBtn">Submit answer</button>
+            <button disabled={answer === null} onClick={handleSubmit} id="submitAnswerBtn">Submit answer</button>
           </>
         ) : 'Loading next quiz...'
       }
@@ -45,4 +55,11 @@ export function Quiz(props) {
   )
 }
 
-export default Quiz;
+const mapStateToProps = state => {
+  return {
+    answer: state.selectedAnswer,
+    quiz: state.quiz
+  }
+}
+
+export default connect(mapStateToProps, actionCreators)(Quiz);

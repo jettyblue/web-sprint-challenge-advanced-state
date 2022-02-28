@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
-import * as actionCreators from '../state/action-creators'
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import * as actionCreators from '../state/action-creators';
 
 export function Form(props) {
   const [disabled, setDisabled] = useState(true);
@@ -14,10 +14,10 @@ export function Form(props) {
       } else {
         setDisabled(true)
       }
-  }, [props.form])
+  }, [props.form]);
 
   const onChange = evt => {
-    props.inputChange(evt.target.id, evt.target.value)
+    props.inputChange(evt.target.id, evt.target.value);
   }
 
   const onSubmit = evt => {
@@ -27,7 +27,7 @@ export function Form(props) {
       true_answer_test: props.form.newTrueAnswer,
       false_answer_text: props.form.newFalseAnswer
     })
-    props.resetForm()
+    props.resetForm();
   }
 
   return (
@@ -41,4 +41,4 @@ export function Form(props) {
   )
 }
 
-export default connect(st => st, actionCreators)(Form)
+export default connect(st => st, actionCreators)(Form);

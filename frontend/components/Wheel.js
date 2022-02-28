@@ -5,6 +5,7 @@ import * as actionCreators from '../state/action-creators';
 export function Wheel(props) {
   const { wheel, moveClockwise, moveCounterClockwise } = props;
   console.log(props);
+  
   return (
     <div id="wrapper">
       <div id="wheel">
