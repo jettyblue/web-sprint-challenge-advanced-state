@@ -41,6 +41,7 @@ function Quiz(props) {
               </div>
 
               <div className= { answer === quiz.answers[1] ? 'answer selected' : answer === null ? 'answer' : 'answer' }>
+                { quiz.answers[1].text }
                 <button onClick={handleWrongAnswer}>
                   { answer === quiz.answers[1] ? 'SELECTED' : answer === null ? 'Select' : 'Select' }
                 </button>

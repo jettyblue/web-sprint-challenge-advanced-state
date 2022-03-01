@@ -45,7 +45,7 @@ export function fetchQuiz() {
 }
 export function postAnswer(quiz, answer) {
   return function (dispatch) {
-    // dispatch({ type: types.SET_SELECTED_ANSWER, payload: answerObj})
+    // dispatch({ type: types.SET_SELECTED_ANSWER, payload: ______})
     axios.post('http://localhost:9000/api/quiz/answer', { quiz_id: quiz.quiz_id, answer_id: answer.answer_id })
       .then(res => {
         console.log(res);
@@ -70,7 +70,7 @@ export function postQuiz(payload, formMessage) {
     // dispatch({ type: types.SET_INFO_MESSAGE, payload: res.data })
     axios.post('http://localhost:9000/api/quiz/new',
       { question_text: payload.newQuestion,
-        true_answer_test: payload.newTrueAnswer,
+        true_answer_text: payload.newTrueAnswer,
         false_answer_text: payload.newFalseAnswer })
       .then(res => {
         dispatch({ type: types.SET_INFO_MESSAGE, payload: `Congrats: "${formMessage} is a great question!` })
