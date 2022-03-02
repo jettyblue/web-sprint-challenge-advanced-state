@@ -20,8 +20,8 @@ export const setQuiz = quiz => {
   ({ type: types.SET_QUIZ_INTO_STATE, payload: quiz })
 }
 
-export const inputChange = (input) => 
-  ({ type: types.INPUT_CHANGE, payload: input })
+export const inputChange = (value) =>  // might be input and payload: input
+  ({ type: types.INPUT_CHANGE, payload: value })
 
 export const resetForm = () =>
   ({ type: types.RESET_FORM })
