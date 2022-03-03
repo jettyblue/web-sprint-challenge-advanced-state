@@ -7,19 +7,13 @@ export function Form(props) {
   const { form } = props
 
   const onChange = evt => {
-    // const { value } = evt.target
-    // props.inputChange(value)
-    props.inputChange(evt.target.id, evt.target.value)
+    const { value } = evt.target
+    props.inputChange(value)
   }
 
   const onSubmit = evt => {
     evt.preventDefault()
-    props.postQuiz({
-      question_text: props.form.newQuestion,
-      true_answer_text: props.form.newTrueAnswer,
-      false_answer_text: props.form.newFalseAnswer
-    })
-    props.resetForm()
+    props.postQuiz(form, form.newQuestion)
   }
 
   const isDisabled = () => {
