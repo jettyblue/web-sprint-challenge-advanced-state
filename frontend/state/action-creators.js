@@ -22,7 +22,7 @@ export function setQuiz(quiz) {
   return { type: types.SET_QUIZ_INTO_STATE, payload: quiz }
 }
 
-export function inputChange(input) {  // might be value and payload: value
+export function inputChange(input) {
   return { type: types.INPUT_CHANGE, payload: input }
 }
 
@@ -36,7 +36,7 @@ export function fetchQuiz() {
     // dispatch({ type: types.SET_QUIZ_INTO_STATE, payload: null })
     axios.get('http://localhost:9000/api/quiz/next')
       .then(res => {
-        console.log(res);
+        console.log('fetch quiz', res);
         dispatch({ type: types.SET_QUIZ_INTO_STATE, payload: res.data });
       })
       .catch(err => {
@@ -50,9 +50,9 @@ export function fetchQuiz() {
 export function postAnswer(quiz, answer) {
   return function (dispatch) {
     // dispatch({ type: types.SET_SELECTED_ANSWER, payload: ______})
-    axios.post('http://localhost:9000/api/quiz/answer', { quiz_id: quiz.quiz_id, answer_id: answer.answer_id }) // might be just { quiz_id, answer_id }
+    axios.post('http://localhost:9000/api/quiz/answer', { quiz_id: quiz.quiz_id, answer_id: answer.answer_id })
       .then(res => {
-        console.log(res);
+        console.log('post answer', res);       
         dispatch({ type: types.SET_SELECTED_ANSWER, payload: null })
         dispatch({ type: types.SET_INFO_MESSAGE, payload: res.data.message})
         axios.get('http://localhost:9000/api/quiz/next')
@@ -69,7 +69,7 @@ export function postAnswer(quiz, answer) {
     // - Dispatch the fetching of the next quiz
   }
 }
-export function postQuiz(payload, infoMessage) {
+export function postQuiz(payload) {
   return function (dispatch) {
     // dispatch({ type: types.SET_INFO_MESSAGE, payload: res.data })
     axios.post('http://localhost:9000/api/quiz/new',
@@ -77,7 +77,7 @@ export function postQuiz(payload, infoMessage) {
         true_answer_text: payload.newTrueAnswer,
         false_answer_text: payload.newFalseAnswer })
       .then(res => {
-        dispatch({ type: types.SET_INFO_MESSAGE, payload: `Congrats: ${infoMessage} is a great question!` })
+        dispatch({ type: types.SET_INFO_MESSAGE, payload: `Congrats: ${payload.newQuestion} is a great question!` })
         dispatch({ type: types.RESET_FORM })
       })
       .catch(err => {

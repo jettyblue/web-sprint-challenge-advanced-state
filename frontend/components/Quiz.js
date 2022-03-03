@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 function Quiz(props) {
   const { quiz , answer } = props;
-  // console.log(props);
 
   useEffect(() => {
       props.fetchQuiz()
